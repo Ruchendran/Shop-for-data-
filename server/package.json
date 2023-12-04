@@ -1,13 +1,26 @@
 {
-  "name": "server",
+  "name": "shop-for-data-",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+
+
   "scripts": {
     "build": "echo \"No build specified\" && exit 1",
        "test": "echo \"No test specified\" && exit 1",    
         "start": "node index.js"
   },
+  "repository": {
+    "type": "git",
+         "url": "git+https://github.com/Ruchendran/Shop-for-data-.git"
+  },
+  "bugs": {
+        "url": "https://github.com/Ruchendran/Shop-for-data-/issues"
+       },
+      "homepage": "https://github.com/Ruchendran/Shop-for-data-#readme",
+
+
+
   "keywords": [],
   "author": "",
   "license": "ISC",
