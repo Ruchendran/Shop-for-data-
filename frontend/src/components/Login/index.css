@@ -19,11 +19,11 @@
 
     background-color:#06070a;
 
-    justify-content: space-around;
+    justify-content: space-between;
 
     align-items: center;
 
-    height:80vh;
+    height:85vh;
 
     border-radius: 5px;
 
@@ -56,7 +56,7 @@
 
 .use{
 
-    height:40vh;
+    height:50vh;
 
     justify-content: space-around;
 

@@ -81,34 +81,6 @@ class Login extends Component{
 
                     const details={"name":username,"password":password}
 
-                 
-
-                   
-
-
-
-                    const options={
-                        method:"POST",
-                        headers:{
-                            "Content-Type":"application/json"
-                        },
-                        body:JSON.stringify(details)
-                    }
-                 const apiForuser= await fetch("http://localhost:4000/userslist",options)
-
-                   const getTables= await fetch("http://localhost:4000/getTable")
-
-                   const tableJson=await getTables.json()
-
-                   const tableFilter=tableJson.find((s)=>(
-                    s.name===username
-                   ))
-
-                    if(tableFilter===undefined){
-                        const histTable="hist"+username.toLowerCase()
-                        const apitable=await fetch(`http://localhost:4000/table/${username.toLowerCase()}/${histTable}`);
-                    
-                    }
 
                     const dataStore={"name":username,"email":email,"password":password}
 
@@ -139,6 +111,38 @@ class Login extends Component{
                      }
                      else{
 
+                 
+
+                   
+
+
+
+                    const options={
+                        method:"POST",
+                        headers:{
+                            "Content-Type":"application/json"
+                        },
+                        body:JSON.stringify(details)
+                    }
+                 const apiForuser= await fetch("http://localhost:4000/userslist",options)
+
+                   const getTables= await fetch("http://localhost:4000/getTable")
+
+                   const tableJson=await getTables.json()
+
+                   const tableFilter=tableJson.find((s)=>(
+                    s.name===username
+                   ))
+
+                    if(tableFilter===undefined){
+                        const histTable="hist"+username.toLowerCase()
+                        const apitable=await fetch(`http://localhost:4000/table/${username.toLowerCase()}/${histTable}`);
+                    
+                    }
+
+                
+                    
+
 
                 history.replace("/")
                
@@ -151,8 +155,8 @@ class Login extends Component{
                     })
 
                    
-
-                     }
+                }
+                     
                     
                 }
                 else{
@@ -214,14 +218,17 @@ class Login extends Component{
          
             this.setState({
                 selectType:"Log User",
-                error:""
+                error:"",
+               
             })
         }
 
 
         emailtext=(e)=>{
             this.setState({
-                email:e.target.value
+                email:e.target.value,
+                mailError:"",
+               
             })
         }
 

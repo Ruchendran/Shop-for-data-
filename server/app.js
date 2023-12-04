@@ -2,6 +2,8 @@ const express=require("express")
 
 const path=require("path")
 
+const port=process.env.PORT || 4000;
+
 const bodyParser=require("body-parser")
 
 const nodemailer=require("nodemailer")
@@ -30,7 +32,7 @@ initiate=async()=>{
             filename:dbPath,
             driver:sqlite3.Database
         })
-        app.listen(4000,()=>(
+        app.listen(port,()=>(
             console.log("Server Running at http://localhost:4000/")
         ))
     }
