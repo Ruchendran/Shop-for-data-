@@ -12,7 +12,9 @@ class Login extends Component{
         error:"",
         selectType:"Log User",
         nameExist:false,
-        tableError:""
+        tableError:"",
+        email:"",
+        mailError:false
     }
 
  
@@ -41,7 +43,7 @@ class Login extends Component{
 
         const {history}=this.props;
       
-     const {username,password,selectType}=this.state;
+     const {username,password,selectType,email}=this.state;
 
      
 
@@ -79,6 +81,10 @@ class Login extends Component{
 
                     const details={"name":username,"password":password}
 
+                 
+
+                   
+
 
 
                     const options={
@@ -101,20 +107,52 @@ class Login extends Component{
                     if(tableFilter===undefined){
                         const histTable="hist"+username.toLowerCase()
                         const apitable=await fetch(`http://localhost:4000/table/${username.toLowerCase()}/${histTable}`);
-                    }
-                   
-
                     
+                    }
+
+                    const dataStore={"name":username,"email":email,"password":password}
+
+                    const store={
+
+                        method:"POST",
+                        headers:{
+                            "Content-Type":"application/json"
+                        },
+                        body:JSON.stringify(dataStore)
+
+                    }
+                  
+                    const Api=await fetch("http://localhost:4000/post",store)
+
+                    const dataApi= await Api.json()
+
+                  
+
+                     if(dataApi.error==="Invalid"){
+
+                        this.setState({
+                            mailError:true,
+                            email:email
+                            
+                        })
+                        
+                     }
+                     else{
+
+
+                history.replace("/")
+               
 
                     this.setState({
                         nameExist:false,
                         username:"",
-                        password:""
+                        password:"",
+                        email:"",mailError:false
                     })
 
-                    history.replace("/")
+                   
 
-
+                     }
                     
                 }
                 else{
@@ -122,7 +160,8 @@ class Login extends Component{
                         this.setState({
                             nameExist:true,
                             username:"",
-                            password:""
+                            password:"",
+                            mailError:false
                         })
                 }
             }
@@ -179,10 +218,19 @@ class Login extends Component{
             })
         }
 
+
+        emailtext=(e)=>{
+            this.setState({
+                email:e.target.value
+            })
+        }
+
     render(){
 
 
-        const {error,selectType,nameExist,username,password}=this.state;
+        const {error,selectType,nameExist,username,password,email,mailError}=this.state;
+
+    
        
          return(
             <div className="log-main" >
@@ -198,6 +246,9 @@ class Login extends Component{
                             <input id="input1" type="text" value={username} placeholder="Enter Your name" className="fie" onChange={this.user}  />
                             <label className="text"  htmlFor="input2"  >Password</label>
                             <input id="input2" type="password" value={password} placeholder="Enter Your Password" className="fie" onChange={this.hide}/>
+                            {selectType==="New User"?<>  <label className="text"  htmlFor="input3"  > Email</label>
+                            <input id="input3" type="text" value={email} placeholder="Enter Your email" className="fie" onChange={this.emailtext}/>
+                        </>:""}
                         </div>
 
                         <button className="sign" type="submit"  >Login</button>
@@ -213,6 +264,7 @@ class Login extends Component{
                         </div>
 
                         <p className="er-msg" >{nameExist?"Name Already exists!":""}</p>
+                        <p className="er-msg" >{mailError?"Invalid Mail":""} </p>
                         
                         </form>
             </div>

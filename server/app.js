@@ -2,6 +2,10 @@ const express=require("express")
 
 const path=require("path")
 
+const bodyParser=require("body-parser")
+
+const nodemailer=require("nodemailer")
+
 const {CleanWebpackPlugin} =require("clean-webpack-plugin")
 
 const {open} =require("sqlite")
@@ -39,6 +43,56 @@ initiate=async()=>{
 }
 
 initiate();
+
+app.post("/post",async(request,response)=>{
+
+    const {name,email,password}=request.body;
+
+    console.log(email)
+
+    if(email.includes("@gmail.com")){
+
+    const transport=nodemailer.createTransport({
+        service:"gmail",
+        auth:{
+            user:"vvruchendran@gmail.com",
+            pass:"nqzq azjd fdwk mhri"
+        }
+    })
+
+    const sendText={
+        from :"vvruchendran@gmail.com",
+        to:`${email}`,
+        subject:"Qt-Data-Shop",
+        text:`Welcome ${name},U were Successfully Create your account in Qt-Data-Shop and your password is ${password}
+        ,Dont share password to anyone
+        `
+    }
+
+    transport.sendMail(sendText,(error,info)=>{
+        if(error){
+          
+             response.send({error:"mail is ok but error in address"})
+            
+        }
+        else{
+           
+             response.send({error:"Success"})
+        }
+
+       
+
+       
+    })
+    transport.close()
+
+    
+
+}
+else{
+    response.send({error:"Invalid"})
+}
+})
 
 app.get("/table/:user/:histTable/",async(request,response)=>{
     const {user,histTable}=request.params;
