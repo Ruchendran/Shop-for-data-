@@ -12,6 +12,8 @@ import "./index.css"
 
 const Header=(props)=>{
 
+    const Name=Cookies.get("name")
+
     const SignOut=()=>{
 
         Cookies.remove("password")
@@ -22,6 +24,49 @@ const Header=(props)=>{
         history.replace("/login")
         
     }
+
+    const close=async()=>{
+
+        const options={
+            method:"GET",
+            headers:{
+                "Content-Type":"application/json"
+            }
+        }
+            
+        const url=`http://localhost:4000/drop/${Name}`
+
+        const fet=await fetch(url,options)
+
+        const histTable="hist"+Name
+
+        const url1=`http://localhost:4000/histDrop/${histTable}`
+
+        const fet1=await fetch(url1,options)
+
+
+        const url2=`http://localhost:4000/dropUser/${Name}`
+
+        const options1={
+            method:"DELETE"
+        }
+
+
+        const fet2=await fetch(url2,options1)
+
+        console.log(fet.ok)
+
+        Cookies.remove("password")
+        Cookies.remove("name")
+
+        const {history}=props;
+
+        history.replace("/login")
+
+        
+    }
+
+ 
 
     return(
     <div className="header-main" >
@@ -78,6 +123,12 @@ const Header=(props)=>{
 
         <button className="signOut" onClick={SignOut} >Logout</button>
 
+        <Popup trigger={<button className="out"  >{Name[0]}</button>}>
+
+        <button className="close" onClick={close} >Close Account</button>
+
+        </Popup>
+
         <Popup trigger={<button className="trig-but" > {<IoFilterSharp className="trig" />}  </button>}  className="pop"  >
             <ul className="ul" >
 
@@ -128,6 +179,8 @@ const Header=(props)=>{
             <button className="signout-s" onClick={SignOut} >
                     Logout
             </button> 
+
+            <button className="signout-s" onClick={close} >Close</button>
             </ul>
               
 

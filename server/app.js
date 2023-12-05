@@ -46,6 +46,40 @@ initiate=async()=>{
 
 initiate();
 
+
+app.get("/drop/:name",async(request,response)=>{
+    
+    const {name}=request.params;
+    const que=`drop table ${name}`;
+
+    const final =await db.run(que);
+
+    response.send("Succesfully dropped")
+   
+})
+
+app.delete("/dropUser/:name",async(request,response)=>{
+
+    const {name}=request.params;
+
+    const que=`delete from userTable where name="${name}"`;
+
+    const final=await db.run(que);
+
+    response.send("Succesfully deleted from userTable")
+})
+
+app.get("/histDrop/:table",async(request,response)=>{
+    const {table}=request.params;
+    const que1=`drop table ${table}`;
+
+    const final1=await db.run(que1)
+
+    response.send("Succesfully hist table dropped")
+})
+
+
+
 app.post("/post",async(request,response)=>{
 
     const {name,email,password}=request.body;
@@ -111,6 +145,8 @@ app.get("/table/:user/:histTable/",async(request,response)=>{
 
     response.send("table done")
 })
+
+
 
 
 app.post("/userslist",async(request,response)=>{
