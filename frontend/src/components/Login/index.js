@@ -57,8 +57,9 @@ class Login extends Component{
 
         else{
 
-            Cookies.set("password",password,{expires:30});
+         
             Cookies.set("name",username.toLocaleLowerCase(),{expires:30})
+            Cookies.set("user",username,{expires:30})
 
             if(selectType==="New User"){
                 
@@ -98,6 +99,11 @@ class Login extends Component{
 
                     const dataApi= await Api.json()
 
+                
+
+
+                  
+
                   
 
                      if(dataApi.error==="Invalid"){
@@ -125,6 +131,14 @@ class Login extends Component{
                         body:JSON.stringify(details)
                     }
                  const apiForuser= await fetch("http://localhost:4000/userslist",options)
+
+                 const jsonApi=await apiForuser.json()
+
+                 const {token}=jsonApi;
+
+                 console.log(token)
+                 
+                 Cookies.set("jwtToken",token,{expires:30})
 
                    const getTables= await fetch("http://localhost:4000/getTable")
 
@@ -172,12 +186,18 @@ class Login extends Component{
             
             if(selectType==="Log User"){
 
+                const jwtToken=Cookies.get("jwtToken")
+
                 const getUser=await fetch("http://localhost:4000/lists")
+
+            
+
+               
 
                 const jsonUser=await getUser.json()
 
                 const LoginFilter=jsonUser.filter((s)=>(
-                    s.password===password && s.name===username
+                   s.name===username
                 ))
                     if(LoginFilter.length===0){
                        this.setState({
@@ -185,7 +205,38 @@ class Login extends Component{
                        })
                     }
                     else{
+                      
+
+                        const tokenOption={
+
+                          
+                            method:"GET",
+                            headers:{
+                                "Content-Type":"application/json",
+                                "Authorization":`Bearer ${jwtToken}`
+                            }
+                        }
+
+                        const apiToken= await fetch(`http://localhost:4000/token/${password}`,tokenOption)
+
+                      
+
+                        const jsonToken=await apiToken.json();
+
+                        const {string}=jsonToken;
+
+                        console.log(jsonToken)
+
+                        if(string==="failure"){
+                            this.setState({
+                                error:"ur credentials is wrong!!"
+                            })
+                        }
+                        else{
+                        
                         history.replace("/")
+
+                        }
                     }
 
                 

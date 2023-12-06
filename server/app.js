@@ -1,6 +1,10 @@
 const express=require("express")
 
+
+
 const path=require("path")
+
+const jwt=require("jsonwebtoken")
 
 const port=process.env.PORT || 4000;
 
@@ -84,7 +88,9 @@ app.post("/post",async(request,response)=>{
 
     const {name,email,password}=request.body;
 
-    console.log(email)
+  
+
+    
 
     if(email.includes("@gmail.com")){
 
@@ -153,21 +159,45 @@ app.post("/userslist",async(request,response)=>{
 
     const {name,password}=request.body;
 
-    console.log(name)
+    const jwtToken=jwt.sign(password,"this_is_secret")
+
+  
 
     const data=new Date()
 
     const str=`${data.getFullYear()}-${data.getMonth()+1}-${data.getDate()} ${data.getHours()}:${data.getMinutes()}:${data.getSeconds()}`
 
-    const que=`insert into userTable (name,password,Date)
+    const que=`insert into userTable (name,Date)
     
-    values("${name}","${password}","${str}")
+    values("${name}","${str}")
     `;
     const final =await db.run(que);
 
-    response.send("Succesfully user has to posted!")
+    response.send({token:jwtToken})
 })
 
+
+app.get("/token/:password",async(request,response)=>{
+
+    const {password}=request.params;
+    
+    const jwtToken=request.headers.authorization.split(" ")
+
+    const tokenVeri=jwtToken[1]
+
+  
+
+    const veri=jwt.verify(tokenVeri,"this_is_secret")
+
+  
+
+    if(veri===password){
+        response.send({string:"success"})
+    }
+    else{
+        response.send({string:"failure"})
+    }
+})
 
 
 app.get("/history/:name/:tableName",async(request,response)=>{

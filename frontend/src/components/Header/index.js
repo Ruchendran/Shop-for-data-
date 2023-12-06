@@ -16,8 +16,11 @@ const Header=(props)=>{
 
     const SignOut=()=>{
 
-        Cookies.remove("password")
         Cookies.remove("name")
+
+        Cookies.remove("user")
+
+    
 
         const {history}=props;
 
@@ -44,8 +47,9 @@ const Header=(props)=>{
 
         const fet1=await fetch(url1,options)
 
+        const NameUser=Cookies.get("user")
 
-        const url2=`http://localhost:4000/dropUser/${Name}`
+        const url2=`http://localhost:4000/dropUser/${NameUser}`
 
         const options1={
             method:"DELETE"
@@ -56,8 +60,12 @@ const Header=(props)=>{
 
         console.log(fet.ok)
 
-        Cookies.remove("password")
+     
         Cookies.remove("name")
+
+        Cookies.remove("user")
+
+        Cookies.remove("jwtToken")
 
         const {history}=props;
 
